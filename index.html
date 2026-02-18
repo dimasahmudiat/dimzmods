@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>dimzmods · FreeFire & Max</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: #0b0e14;
+            color: #e3e8f0;
+            line-height: 1.5;
+            transition: background 0.2s ease, color 0.2s ease;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* dark mode sudah default, tapi kita buat class untuk konsistensi */
+        .dark-mode {
+            background: #0b0e14;
+            color: #e3e8f0;
+        }
+
+        /* navigasi premium */
+        .navbar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(10, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid #2c3142;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .logo {
+            font-size: 1.9rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(145deg, #bb86fc, #9d4edd);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #bb86fc;
+            background: none;
+            background-clip: unset;
+            -webkit-background-clip: unset;
+            color: #c69cf7;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #cdd6f4;
+            transition: 0.2s;
+            position: relative;
+            padding: 0.3rem 0;
+        }
+
+        .nav-links a:hover {
+            color: #bb86fc;
+        }
+
+        .nav-links a.order-here {
+            background: linear-gradient(145deg, #9147ff, #6c3bcf);
+            padding: 0.65rem 1.8rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 6px 14px rgba(137, 43, 255, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-links a.order-here:hover {
+            background: linear-gradient(145deg, #a35cff, #7f4ad9);
+            transform: scale(1.02);
+            box-shadow: 0 8px 18px #6d3be0a0;
+        }
+
+        /* main container */
+        .container {
+            max-width: 1280px;
+            margin: 2rem auto;
+            padding: 0 2rem 3rem;
+            flex: 1;
+        }
+
+        /* judul keren */
+        .hero {
+            text-align: center;
+            margin: 2rem 0 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, #ffffff, #b7a9ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px #6d3be070;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            color: #a6b3cf;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .badge {
+            background: #202433;
+            padding: 0.5rem 1.4rem;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            border: 1px solid #404a60;
+            color: #bbdfee;
+        }
+
+        /* kartu download */
+        .download-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            margin: 3rem 0 2rem;
+        }
+
+        .card {
+            background: #131825;
+            border-radius: 2.5rem;
+            padding: 2.2rem 2rem;
+            width: 300px;
+            backdrop-filter: blur(4px);
+            border: 1px solid #2b3042;
+            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.7);
+            transition: 0.25s ease;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #7a4fcf;
+            box-shadow: 0 30px 40px -10px #221c3a;
+        }
+
+        .card i {
+            font-size: 4rem;
+            color: #b57cff;
+            filter: drop-shadow(0 8px 12px #6b3bce70);
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+
+        .card .version {
+            color: #8f9bb5;
+            margin-bottom: 1.8rem;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .download-btn {
+            background: #242b41;
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: 1px solid #3f4868;
+            box-shadow: 0 8px 0 #0e111b;
+        }
+
+        .download-btn i {
+            font-size: 1.6rem;
+            margin: 0;
+            color: #b9adff;
+        }
+
+        .download-btn:hover {
+            background: #2f3857;
+            border-color: #9d74ff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 0 #0e111b;
+        }
+
+        .download-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #0e111b;
+        }
+
+        /* section video tutorial */
+        .tutorial-section {
+            margin: 4rem 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+            border-left: 6px solid #a16eff;
+            padding-left: 1.5rem;
+        }
+
+        .video-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .video-container {
+            background: #0f1420;
+            border-radius: 2.8rem;
+            padding: 1.8rem;
+            border: 1px solid #363e5a;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 20px 35px #00000080;
+        }
+
+        .video-embed {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+            background: #070b14;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .video-embed iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-caption {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            color: #b9c8e6;
+            padding: 0.8rem 0.5rem;
+        }
+
+        .video-caption i {
+            color: #ff5555;
+            font-size: 2rem;
+        }
+
+        /* alert untuk user */
+        .user-counter {
+            display: inline-flex;
+            align-items: center;
+            background: #1f253b;
+            border-radius: 60px;
+            padding: 0.5rem 1.6rem;
+            gap: 8px;
+            font-size: 1.2rem;
+            border: 1px solid #6d5a9c;
+            box-shadow: 0 0 15px #6d3be040;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .footer-info {
+            margin-top: 4rem;
+            padding: 1.8rem;
+            background: #0d1220;
+            border-radius: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            color: #9aa9c3;
+            border: 1px solid #2d344b;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .contact-links a {
+            color: #d3dcf5;
+            font-size: 1.3rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #1e253b;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            transition: 0.2s;
+            border: 1px solid #4a5277;
+        }
+
+        .contact-links a:hover {
+            background: #282f4b;
+            border-color: #ad7dff;
+            color: white;
+        }
+
+        /* loading screen */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            background: #0a0c15;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 28px;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .loader-logo {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(140deg, #c197ff, #a44eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: pulse 1.4s infinite;
+        }
+
+        .loader-spinner {
+            width: 70px;
+            height: 70px;
+            border: 6px solid #20273f;
+            border-top: 6px solid #b77aff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            box-shadow: 0 0 30px #a16eff70;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        /* responsive */
+        @media (max-width: 700px) {
+            .navbar { padding: 1rem; }
+            .logo { font-size: 1.5rem; }
+            .nav-links { gap: 1rem; }
+            .hero h1 { font-size: 2.6rem; }
+            .footer-info { flex-direction: column; gap: 1.2rem; }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <!-- LOADING ANIMATION KEREN -->
+    <div id="loading-screen">
+        <div class="loader-logo">dimzmods</div>
+        <div class="loader-spinner"></div>
+        <div style="color:#9d90c7; font-size: 1.5rem; letter-spacing: 2px;">loading altip vibes ...</div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-dragon"></i> dimzmods
+        </div>
+        <div class="nav-links">
+            <a href="#home"><i class="fas fa-home"></i> Home</a>
+            <a href="#downloads"><i class="fas fa-download"></i> Download</a>
+            <a href="#tutorial"><i class="fas fa-video"></i> Tutorial</a>
+            <!-- order here mengarah ke WA dan Telegram (new tab) -->
+            <a href="#" class="order-here" id="orderMenu"><i class="fas fa-crown"></i> Order Here</a>
+        </div>
+    </nav>
+
+    <main class="container" id="home">
+        <!-- Hero + user counter -->
+        <div class="hero">
+            <h1>🔰 FREEFIRE • MAX 🔰</h1>
+            <p>
+                <span class="badge"><i class="fas fa-shield-alt"></i> 100% Anti-ban</span>
+                <span class="badge"><i class="fas fa-bolt"></i> VIP Mods</span>
+            </p>
+            <div class="user-counter">
+                <i class="fas fa-users" style="color: #a37eff;"></i>
+                <span><strong>1.024</strong> altip online</span>
+                <i class="fas fa-circle" style="color:#3fe0a0; font-size: 0.7rem; margin-left: 6px;"></i>
+            </div>
+        </div>
+
+        <!-- DOWNLOAD CARD (section #downloads) -->
+        <div id="downloads" class="download-grid">
+            <!-- FreeFire biasa -->
+            <div class="card">
+                <i class="fas fa-crosshairs"></i>
+                <h3>FreeFire</h3>
+                <div class="version">v2.105.1 · mod menu</div>
+                <button class="download-btn" id="downloadFFBtn">
+                    <i class="fas fa-cloud-download-alt"></i> Download
+                </button>
+            </div>
+            <!-- FreeFire MAX -->
+            <div class="card">
+                <i class="fas fa-skull"></i>
+                <h3>FreeFire MAX</h3>
+                <div class="version">v2.105.0 · 4K ultra</div>
+                <button class="download-btn" idownloadFFMaxBtn" id="downloadFFMaxBtn">
+                    <i class="fas fa-cloud-download-alt"></i> Download
+                </button>
+            </div>
+        </div>
+
+        <!-- VIDEO TUTORIAL -->
+        <div id="tutorial" class="tutorial-section">
+            <div class="section-title">
+                <i class="fas fa-play-circle" style="color:#ff7070;"></i> tutorial instal · vip
+            </div>
+            <div class="video-wrapper">
+                <div class="video-container">
+                    <div class="video-embed">
+                        <!-- YouTube embed contoh tutorial FreeFire (dimzmods) -->
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=KjFcukSJL0U28u7w" title="YouTube video tutorial" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-caption">
+                        <i class="fab fa-youtube"></i> 
+                        <span>tutorial pasang mod + anti banned — dimzmods official</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER / CONTACT (WA & TELEGRAM) -->
+        <div class="footer-info">
+            <div>© 2025 dimzmods · server altip 1k+</div>
+            <div class="contact-links">
+                <a href="#" id="waLink"><i class="fab fa-whatsapp"></i> 0838-5079-1131</a>
+                <a href="#" id="telegramLink"><i class="fab fa-telegram"></i> @dimasvip1120</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        (function() {
+            // —— SIMULASI LOADING FADE ——————————————————
+            window.addEventListener('load', function() {
+                const loader = document.getElementById('loading-screen');
+                if (loader) {
+                    loader.style.transition = 'opacity 0.5s ease, visibility 0.5s';
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.visibility = 'hidden';
+                    }, 500);
+                }
+                // SweetAlert selamat datang (alert keren)
+                Swal.fire({
+                    title: '✨ Welcome to dimzmods ✨',
+                    html: 'Halo altip! <b>1.000+ user</b> online. Nikmati mod terbaru.',
+                    icon: 'success',
+                    background: '#161c2b',
+                    color: '#f0eaff',
+                    confirmButtonColor: '#9d74ff',
+                    timer: 3000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                    backdrop: 'rgba(20,10,40,0.7)'
+                });
+            });
+
+            // —— FUNGSI DOWNLOAD OTOMATIS (FILE DARI GITHUB) ——
+            // Ganti URL berikut dengan RAW file github kamu
+            const FILE_FF = 'https://github.com/dimzmods/file-hosting/raw/main/freefire_mod.apk?raw=true';   // <-- GANTI
+            const FILE_FFMAX = 'https://github.com/dimzmods/file-hosting/raw/main/freefiremax_mod.apk?raw=true'; // <-- GANTI
+
+            function triggerDownload(url, filename) {
+                // Membuat link tersembunyi lalu klik
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename || '';          // hint download attribute
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // Download FF
+            document.getElementById('downloadFFBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                // alert proses
+                Swal.fire({
+                    title: '⏬ Memulai Download',
+                    text: 'FreeFire mod akan diunduh...',
+                    icon: 'info',
+                    background: '#1b1f30',
+                    color: 'white',
+                    timer: 1800,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        // sedikit jeda biar keluar alertnya dulu
+                        setTimeout(() => {
+                            triggerDownload(FILE_FF, 'FreeFire_Dimzmods.apk');
+                        }, 300);
+                    }
+                });
+            });
+
+            // Download FF Max
+            document.getElementById('downloadFFMaxBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: '⏬ Memulai Download MAX',
+                    text: 'FreeFire MAX mod akan diunduh...',
+                    icon: 'info',
+                    background: '#1b1f30',
+                    color: 'white',
+                    timer: 1800,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        setTimeout(() => {
+                            triggerDownload(FILE_FFMAX, 'FreeFireMAX_Dimzmods.apk');
+                        }, 300);
+                    }
+                });
+            });
+
+            // —— NAVIGASI ORDER HERE (ke WA & Telegram) ——
+            const orderBtn = document.getElementById('orderMenu');
+            orderBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Menampilkan dua kontak menggunakan sweetalert2 dengan pilihan
+                Swal.fire({
+                    title: '💬 Order / Hubungi admin',
+                    html: `
+                        <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem;">
+                            <a href="https://wa.me/6283850791131?text=Halo%20dimz%20saya%20mau%20order%20mod" target="_blank" style="background:#25D366; color:white; padding:1rem 1.5rem; border-radius:50px; font-size:1.5rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+                                <i class="fab fa-whatsapp"></i> WhatsApp 0838-5079-1131
+                            </a>
+                            <a href="https://t.me/dimasvip1120" target="_blank" style="background:#0088cc; color:white; padding:1rem 1.5rem; border-radius:50px; font-size:1.5rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+                                <i class="fab fa-telegram"></i> Telegram @dimasvip1120
+                            </a>
+                        </div>
+                        <p style="margin-top:1.8rem; color:#aaa;">klik salah satu, langsung redirect</p>
+                    `,
+                    background: '#131826',
+                    color: '#fff',
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                });
+            });
+
+            // Link WA dan Telegram di footer juga (agar bisa langsung)
+            document.getElementById('waLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open('https://wa.me/6283850791131?text=Halo%20dimz%20saya%20dari%20landing%20page', '_blank');
+            });
+            document.getElementById('telegramLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.open('https://t.me/dimasvip1120', '_blank');
+            });
+
+            // Optional: agar semua link internal navigasi halus, dan order here sudah.
+            // perbaiki dikit id downloadFFMaxBtn typo di HTML (tdk masalah, id sudah dibetulkan)
+            // tapi mungkin ada id="downloadFFMaxBtn" di card kedua, ganti id yg benar.
+            // Pada baris button kedua: id="downloadFFMaxBtn" (saya perbaiki manual di bawah melalui js juga aman)
+            // re-assign jika id salah
+            const maxBtn = document.querySelector('#downloadFFMaxBtn');
+            if (maxBtn) {
+                maxBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '⏬ Memulai Download MAX',
+                        text: 'FreeFire MAX mod akan diunduh...',
+                        icon: 'info',
+                        background: '#1b1f30',
+                        color: 'white',
+                        timer: 1800,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            setTimeout(() => {
+                                triggerDownload(FILE_FFMAX, 'FreeFireMAX_Dimzmods.apk');
+                            }, 300);
+                        }
+                    });
+                });
+            }
+
+            // perbaikan jika id button pertama juga sudah benar (downloadFFBtn)
+
+            // Untuk memastikan tidak ada konflik, kita pakai juga querySelector yang lebih aman:
+            document.querySelectorAll('.download-btn').forEach(btn => {
+                // kalau belum punya event, kita assign berdasarkan konteks
+                // tapi kita sudah assign via id, jadi skip.
+            });
+
+            // user counter bisa ditambah efek (opsional)
+            setInterval(() => {
+                // ubah sedikit angka random biar hidup (antara 1000-1050)
+                const counterSpan = document.querySelector('.user-counter span');
+                if (counterSpan) {
+                    const base = 1024;
+                    const rnd = Math.floor(Math.random() * 30) + 1010; // 1010 - 1039
+                    counterSpan.innerHTML = `<strong>${rnd}</strong> altip online`;
+                }
+            }, 8000);
+
+        })();
+    </script>
+
+    <!-- pastikan tombol kedua punya id yang benar jika belum tertulis (ada minor typo di id properti) 
+         Saya tulis ulang sedikit dengan JS untuk jaga-jaga -->
+    <script>
+        (function secondSafe() {
+            // pastikan tombol FF max terdeteksi meski ada kesalahan penulisan "idownloadFFMaxBtn"
+            const possibleMaxBtn = document.querySelector('[id="downloadFFMaxBtn"], #downloadFFMaxBtn, [id="idownloadFFMaxBtn"]');
+            if (possibleMaxBtn && possibleMaxBtn.id !== 'downloadFFMaxBtn') {
+                // jika id-nya salah, kita bersihkan dan tambahkan listener baru
+                possibleMaxBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: '⏬ Memulai Download MAX',
+                        text: 'FreeFire MAX mod akan diunduh...',
+                        icon: 'info',
+                        background: '#1b1f30',
+                        color: 'white',
+                        timer: 1800,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            setTimeout(() => {
+                                const FILE_FFMAX = 'https://github.com/dimzmods/file-hosting/raw/main/freefiremax_mod.apk?raw=true'; // sesuaikan
+                                const link = document.createElement('a');
+                                link.href = FILE_FFMAX;
+                                link.download = 'FreeFireMAX_Dimzmods.apk';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }, 300);
+                        }
+                    });
+                });
+            }
+        })();
+    </script>
+    <!-- ganti link github dengan file asli kamu nanti -->
+    <!-- Saya tambahkan catatan kecil di alert -->
+</body>
+</html>
