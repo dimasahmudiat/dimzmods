@@ -581,6 +581,7 @@
             <div class="contact-links">
                 <a href="#" id="waLink"><i class="fab fa-whatsapp"></i> 0838-5079-1131</a>
                 <a href="#" id="telegramLink"><i class="fab fa-telegram"></i> @dimasvip1120</a>
+                <a href="#" id="botLink"><i class="fab fa-telegram-plane"></i> Bot Order</a>
             </div>
         </div>
     </main>
@@ -696,25 +697,30 @@
                 });
             });
 
-            // ===== ORDER MENU =====
+            // ===== ORDER MENU (dengan BOT TELEGRAM) =====
             document.getElementById('orderMenu').addEventListener('click', function(e) {
                 e.preventDefault();
                 Swal.fire({
-                    title: '💬 Order / Hubungi admin',
+                    title: '💬 Order / Hubungi Admin',
                     html: `
                         <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 0.5rem;">
                             <a href="https://wa.me/6283850791131?text=Halo%20dimz%20saya%20mau%20order%20mod" target="_blank" style="background:#25D366; color:white; padding:1rem 1.5rem; border-radius:50px; font-size:1.5rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
                                 <i class="fab fa-whatsapp"></i> WhatsApp 0838-5079-1131
                             </a>
                             <a href="https://t.me/dimasvip1120" target="_blank" style="background:#0088cc; color:white; padding:1rem 1.5rem; border-radius:50px; font-size:1.5rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
-                                <i class="fab fa-telegram"></i> Telegram @dimasvip1120
+                                <i class="fab fa-telegram"></i> Admin @dimasvip1120
+                            </a>
+                            <a href="https://t.me/dimzpym_bot" target="_blank" style="background:#8774e1; color:white; padding:1rem 1.5rem; border-radius:50px; font-size:1.5rem; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px;">
+                                <i class="fab fa-telegram"></i> Bot @dimzpym_bot
                             </a>
                         </div>
+                        <p style="margin-top:1rem; color: var(--text-muted);">Klik salah satu untuk order otomatis</p>
                     `,
                     background: body.classList.contains('dark-mode') ? '#131826' : '#ffffff',
                     color: body.classList.contains('dark-mode') ? '#fff' : '#1a1f2e',
                     showConfirmButton: false,
                     showCloseButton: true,
+                    width: '600px'
                 });
             });
 
@@ -727,6 +733,12 @@
             document.getElementById('telegramLink').addEventListener('click', (e) => {
                 e.preventDefault();
                 window.open('https://t.me/dimasvip1120', '_blank');
+            });
+
+            // Bot Telegram link
+            document.getElementById('botLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                window.open('https://t.me/dimzpym_bot', '_blank');
             });
 
             // User counter dinamis
