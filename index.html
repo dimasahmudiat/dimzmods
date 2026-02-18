@@ -451,7 +451,7 @@
                 <i class="fas fa-skull"></i>
                 <h3>FreeFire MAX</h3>
                 <div class="version">v2.105.0 · 4K ultra</div>
-                <button class="download-btn" idownloadFFMaxBtn" id="downloadFFMaxBtn">
+                <button class="download-btn" id="downloadFFMaxBtn">
                     <i class="fas fa-cloud-download-alt"></i> Download
                 </button>
             </div>
@@ -513,22 +513,21 @@
                 });
             });
 
-            // —— FUNGSI DOWNLOAD OTOMATIS (FILE DARI GITHUB) ——
-            // Ganti URL berikut dengan RAW file github kamu
-            const FILE_FF = 'https://github.com/dimzmods/file-hosting/raw/main/freefire_mod.apk?raw=true';   // <-- GANTI
-            const FILE_FFMAX = 'https://github.com/dimzmods/file-hosting/raw/main/freefiremax_mod.apk?raw=true'; // <-- GANTI
-
+            // —— FUNGSI DOWNLOAD OTOMATIS (FILE LANGSUNG DARI ROOT) ——
+            // File berada di root dengan nama DimzFF dan DimzFFMAX (tanpa ekstensi)
+            
             function triggerDownload(url, filename) {
                 // Membuat link tersembunyi lalu klik
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = filename || '';          // hint download attribute
+                link.target = '_blank';                   // Buka di tab baru jika perlu
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
             }
 
-            // Download FF
+            // Download FF - LANGSUNG DARI FILE DimzFF
             document.getElementById('downloadFFBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 // alert proses
@@ -543,13 +542,14 @@
                     didOpen: () => {
                         // sedikit jeda biar keluar alertnya dulu
                         setTimeout(() => {
-                            triggerDownload(FILE_FF, 'DimzFF');
+                            // LANGSUNG DOWNLOAD FILE DimzFF (tanpa ekstensi)
+                            triggerDownload('/DimzFF', 'FreeFire_Dimzmods.apk');
                         }, 300);
                     }
                 });
             });
 
-            // Download FF Max
+            // Download FF Max - LANGSUNG DARI FILE DimzFFMAX
             document.getElementById('downloadFFMaxBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 Swal.fire({
@@ -562,7 +562,8 @@
                     showConfirmButton: false,
                     didOpen: () => {
                         setTimeout(() => {
-                            triggerDownload(FILE_FFMAX, 'DimzFFMAX');
+                            // LANGSUNG DOWNLOAD FILE DimzFFMAX (tanpa ekstensi)
+                            triggerDownload('/DimzFFMAX', 'FreeFireMAX_Dimzmods.apk');
                         }, 300);
                     }
                 });
@@ -603,43 +604,8 @@
                 window.open('https://t.me/dimasvip1120', '_blank');
             });
 
-            // Optional: agar semua link internal navigasi halus, dan order here sudah.
-            // perbaiki dikit id downloadFFMaxBtn typo di HTML (tdk masalah, id sudah dibetulkan)
-            // tapi mungkin ada id="downloadFFMaxBtn" di card kedua, ganti id yg benar.
-            // Pada baris button kedua: id="downloadFFMaxBtn" (saya perbaiki manual di bawah melalui js juga aman)
-            // re-assign jika id salah
-            const maxBtn = document.querySelector('#downloadFFMaxBtn');
-            if (maxBtn) {
-                maxBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    Swal.fire({
-                        title: '⏬ Memulai Download MAX',
-                        text: 'FreeFire MAX mod akan diunduh...',
-                        icon: 'info',
-                        background: '#1b1f30',
-                        color: 'white',
-                        timer: 1800,
-                        showConfirmButton: false,
-                        didOpen: () => {
-                            setTimeout(() => {
-                                triggerDownload(FILE_FFMAX, 'FreeFireMAX_Dimzmods.apk');
-                            }, 300);
-                        }
-                    });
-                });
-            }
-
-            // perbaikan jika id button pertama juga sudah benar (downloadFFBtn)
-
-            // Untuk memastikan tidak ada konflik, kita pakai juga querySelector yang lebih aman:
-            document.querySelectorAll('.download-btn').forEach(btn => {
-                // kalau belum punya event, kita assign berdasarkan konteks
-                // tapi kita sudah assign via id, jadi skip.
-            });
-
-            // user counter bisa ditambah efek (opsional)
+            // user counter dinamis
             setInterval(() => {
-                // ubah sedikit angka random biar hidup (antara 1000-1050)
                 const counterSpan = document.querySelector('.user-counter span');
                 if (counterSpan) {
                     const base = 1024;
@@ -650,42 +616,5 @@
 
         })();
     </script>
-
-    <!-- pastikan tombol kedua punya id yang benar jika belum tertulis (ada minor typo di id properti) 
-         Saya tulis ulang sedikit dengan JS untuk jaga-jaga -->
-    <script>
-        (function secondSafe() {
-            // pastikan tombol FF max terdeteksi meski ada kesalahan penulisan "idownloadFFMaxBtn"
-            const possibleMaxBtn = document.querySelector('[id="downloadFFMaxBtn"], #downloadFFMaxBtn, [id="idownloadFFMaxBtn"]');
-            if (possibleMaxBtn && possibleMaxBtn.id !== 'downloadFFMaxBtn') {
-                // jika id-nya salah, kita bersihkan dan tambahkan listener baru
-                possibleMaxBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    Swal.fire({
-                        title: '⏬ Memulai Download MAX',
-                        text: 'FreeFire MAX mod akan diunduh...',
-                        icon: 'info',
-                        background: '#1b1f30',
-                        color: 'white',
-                        timer: 1800,
-                        showConfirmButton: false,
-                        didOpen: () => {
-                            setTimeout(() => {
-                                const FILE_FFMAX = 'https://github.com/dimzmods/file-hosting/raw/main/freefiremax_mod.apk?raw=true'; // sesuaikan
-                                const link = document.createElement('a');
-                                link.href = FILE_FFMAX;
-                                link.download = 'FreeFireMAX_Dimzmods.apk';
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                            }, 300);
-                        }
-                    });
-                });
-            }
-        })();
-    </script>
-    <!-- ganti link github dengan file asli kamu nanti -->
-    <!-- Saya tambahkan catatan kecil di alert -->
 </body>
 </html>
